@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Gate — Dashboard</title>
+    <meta
+      name="description"
+      content="Smart Housing Gate Monitoring System Dashboard"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <!-- Shield/Gate SVG icon -->
+            <svg
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="2"
+                y="4"
+                width="28"
+                height="24"
+                rx="4"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <path d="M16 4V28" stroke="currentColor" stroke-width="2" />
+              <path
+                d="M8 12H12"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M20 12H24"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <circle cx="13" cy="16" r="1.5" fill="currentColor" />
+              <circle cx="19" cy="16" r="1.5" fill="currentColor" />
+            </svg>
+            <span>SmartGate</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="index.html" class="nav-item active">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+            </svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="residents.html" class="nav-item">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            <span>Residents</span>
+          </a>
+          <a href="logs.html" class="nav-item">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+            </svg>
+            <span>Access Logs</span>
+          </a>
+          <a href="settings.html" class="nav-item">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+              />
+            </svg>
+            <span>Settings</span>
+          </a>
+        </nav>
+        <div class="sidebar-footer">Smart Gate v1.0 &copy; 2026</div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <header class="header">
+          <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+          <h1 class="page-title">Dashboard</h1>
+          <div class="header-right">
+            <!-- <span class="header-time" id="currentTime"></span> -->
+            <div class="header-user">
+              <div class="avatar">A</div>
+              <span>Admin</span>
+            </div>
+          </div>
+        </header>
+
+        <div class="content">
+          <!-- ROW 1: Status Cards -->
+          <div class="grid grid-4" id="statusCards">
+            <!-- Gate Status Card -->
+            <div class="card status-card" id="gateStatusCard">
+              <div class="card-body">
+                <div class="status-card-icon gate-closed" id="gateStatusIcon">
+                  <svg
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <rect x="4" y="8" width="40" height="32" rx="4" />
+                    <path d="M24 8V40" />
+                    <path d="M12 18H18" stroke-linecap="round" />
+                    <path d="M30 18H36" stroke-linecap="round" />
+                    <circle cx="21" cy="24" r="2" />
+                    <circle cx="27" cy="24" r="2" />
+                  </svg>
+                </div>
+                <div class="status-card-label">Gate Status</div>
+                <div class="status-card-value" id="gateStatusText">Closed</div>
+                <div class="status-card-badge">
+                  <span class="badge badge-danger" id="gateStatusBadge"
+                    ><span class="status-dot"></span> Closed</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Current Mode Card -->
+            <div class="card status-card">
+              <div class="card-body">
+                <div class="status-card-icon mode-auto" id="modeIcon">
+                  <svg
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="24" cy="24" r="18" />
+                    <path d="M24 14V24L30 28" stroke-linecap="round" />
+                  </svg>
+                </div>
+                <div class="status-card-label">Auto Schedule</div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 10px;
+                  "
+                >
+                  <div
+                    class="status-card-value"
+                    id="currentModeText"
+                    style="font-size: 1.25rem"
+                  >
+                    Enabled
+                  </div>
+                  <label class="toggle-switch">
+                    <input
+                      type="checkbox"
+                      id="autoScheduleToggle"
+                      onchange="toggleAutoSchedule(this.checked)"
+                    />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Current Time Card -->
+            <div class="card status-card">
+              <div class="card-body">
+                <div class="status-card-icon mode-auto">
+                  <svg
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="24" cy="24" r="18" />
+                    <path d="M24 14V24L32 28" stroke-linecap="round" />
+                  </svg>
+                </div>
+                <div class="status-card-label">RTC Time</div>
+                <div class="status-card-value" id="currentTime">--:--:--</div>
+                <div class="status-card-badge">
+                  <span class="badge badge-info" id="fbModeText"
+                    >Loading mode...</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Today's Stats Card -->
+            <div class="card status-card">
+              <div class="card-body">
+                <div class="status-card-icon stats-icon">
+                  <svg
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M8 38V22"
+                      stroke-linecap="round"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M18 38V14"
+                      stroke-linecap="round"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M28 38V26"
+                      stroke-linecap="round"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M38 38V18"
+                      stroke-linecap="round"
+                      stroke-width="4"
+                    />
+                  </svg>
+                </div>
+                <div class="status-card-label">Today's Access</div>
+                <div class="status-card-value" id="totalAccessText">0</div>
+                <div class="stats-mini">
+                  <div class="stats-mini-item">
+                    <span class="text-success">✓</span>
+                    <span id="successCount">0</span>
+                  </div>
+                  <div class="stats-mini-item">
+                    <span class="text-danger">✕</span>
+                    <span id="deniedCount">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ROW 2: Controls + Activity -->
+          <div class="grid grid-2 mt-3" id="mainGrid">
+            <!-- Gate Controls Card -->
+            <div class="card card-gate">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                      d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"
+                    />
+                  </svg>
+                  Gate Controls
+                </h2>
+              </div>
+              <div class="card-body">
+                <div class="gate-controls">
+                  <div class="gate-visual" id="gateVisual">
+                    <div class="gate-pillar left"></div>
+                    <div class="gate-door left-door" id="leftDoor"></div>
+                    <div class="gate-door right-door" id="rightDoor"></div>
+                    <div class="gate-pillar right"></div>
+                  </div>
+                  <div class="control-buttons" id="gateControlButtonsWrapper">
+                    <button
+                      class="btn btn-success btn-lg"
+                      id="btnOpenGate"
+                      onclick="openGate()"
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <polyline points="17 11 12 6 7 11" />
+                        <line x1="12" y1="18" x2="12" y2="6" />
+                      </svg>
+                      Open Gate
+                    </button>
+                    <button
+                      class="btn btn-danger btn-lg"
+                      id="btnCloseGate"
+                      onclick="closeGate()"
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <polyline points="7 13 12 18 17 13" />
+                        <line x1="12" y1="6" x2="12" y2="18" />
+                      </svg>
+                      Close Gate
+                    </button>
+                  </div>
+
+                  <div class="schedule-info" id="scheduleInfo">
+                    <div class="schedule-item">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                      </svg>
+                      Open: <strong id="scheduleOpen">06:00</strong>
+                    </div>
+                    <div class="schedule-item">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                        />
+                      </svg>
+                      Close: <strong id="scheduleClose">19:00</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity Card -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                  </svg>
+                  Recent Activity
+                </h2>
+                <span class="badge badge-info" id="liveIndicator"
+                  ><span class="status-dot online pulse"></span> Live</span
+                >
+              </div>
+              <div class="card-body activity-feed-body">
+                <div class="activity-feed" id="activityFeed">
+                  <div class="empty-state" id="activityEmpty">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                    >
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                      />
+                      <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                    <h3>No activity yet</h3>
+                    <p>Recent access events will appear here in real-time.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/gate-control.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>

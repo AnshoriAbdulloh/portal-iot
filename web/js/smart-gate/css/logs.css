@@ -1,0 +1,87 @@
+.filters-bar {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.filter-group select, .filter-group input {
+  padding: 8px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+.filter-group select:focus, .filter-group input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.export-btn-group {
+  margin-left: auto;
+  display: flex;
+  align-items: flex-end;
+}
+
+.source-badge {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.source-rfid {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.source-admin {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.source-auto {
+  background: var(--warning-light);
+  color: #92400e;
+}
+
+.load-more-wrapper {
+  text-align: center;
+  padding: 16px;
+}
+
+.block {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .export-btn-group {
+    margin-left: 0;
+    margin-top: 12px;
+  }
+}
