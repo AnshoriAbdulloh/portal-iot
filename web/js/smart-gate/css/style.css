@@ -270,9 +270,19 @@ body {
   transition: all;
   transition-duration: 500ms;
 }
+.disabled-siang {
+  pointer-events: none;
+  opacity: 60%;
+  transition: all;
+  transition-duration: 500ms;
+}
 
 .card-body {
   padding: 24px;
+}
+
+.tanda {
+  pointer-events: none;
 }
 
 .card-footer {

@@ -39,8 +39,8 @@ function renderResidents(data) {
     .map(
       ([id, r]) => `
     <tr>
-      <td class="font-bold">${r.name}</td>
-      <td>${r.house}</td>
+      <td class="font-bold">${r.nama || r.name || ''}</td>
+      <td>${r.alamat || r.house || ''}</td>
       <td><span class="resident-uid">${id}</span></td>
       <td>
         <span class="badge ${r.active ? "badge-success" : "badge-danger"}">
@@ -74,9 +74,9 @@ function initSearchResident() {
       const filtered = {};
       Object.entries(residents).forEach(([id, r]) => {
         if (
-          r.name.toLowerCase().includes(query) ||
-          r.house.toLowerCase().includes(query) ||
-          r.uid.toLowerCase().includes(query)
+          (r.nama || r.name || '').toLowerCase().includes(query) ||
+          (r.alamat || r.house || '').toLowerCase().includes(query) ||
+          id.toLowerCase().includes(query)
         ) {
           filtered[id] = r;
         }
@@ -98,8 +98,8 @@ function openEditModal(id) {
   editingId = id;
   const r = residents[id];
   document.getElementById("modalTitle").textContent = "Edit Resident";
-  document.getElementById("residentName").value = r.name;
-  document.getElementById("residentHouse").value = r.house;
+  document.getElementById("residentName").value = r.nama || r.name || '';
+  document.getElementById("residentHouse").value = r.alamat || r.house || '';
   document.getElementById("residentUid").value = id;
   document.getElementById("residentStatus").value = String(r.active);
   toggleModal("residentModal", true);
@@ -119,12 +119,24 @@ function saveResident() {
     return;
   }
 
+  // Name uniqueness validation
+  const nameExists = Object.entries(residents).some(([residentId, r]) => {
+    // If editing, ignore the current resident's own name
+    if (editingId && residentId === editingId) return false;
+    return (r.nama || r.name) === name;
+  });
+
+  if (nameExists) {
+    showToast("Name already exists. Must be unique.", "error");
+    return;
+  }
+
   if (editingId) {
     if (!uid) {
       showToast("UID is required for editing", "error");
       return;
     }
-    const data = { name, house, active };
+    const data = { nama: name, alamat: house, active };
     residentsRef
       .child(editingId)
       .update(data)
@@ -176,7 +188,7 @@ function saveResident() {
 
         document.getElementById("residentUid").value = scannedUid;
 
-        const data = { name, house, active };
+        const data = { nama: name, alamat: house, active };
         residentsRef
           .child(scannedUid)
           .set(data)
@@ -197,7 +209,7 @@ function saveResident() {
     return;
   }
 
-  const data = { name, house, active };
+  const data = { nama: name, alamat: house, active };
   residentsRef
     .child(uid)
     .set(data)

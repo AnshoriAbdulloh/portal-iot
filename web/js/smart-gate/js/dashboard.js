@@ -2,6 +2,11 @@
 // SMART GATE — Dashboard Real-time Logic
 // ============================================
 
+// Global mode variable
+let currentPortalMode = '';
+// Global schedule enabled state
+let isScheduleEnabled = false;
+
 document.addEventListener('DOMContentLoaded', () => {
   listenGateStatus();
   listenSchedule();
@@ -76,6 +81,10 @@ function updateDeviceStatusUI(data) {
   const deviceBadge = document.getElementById('deviceBadge');
   const lastSeenText = document.getElementById('lastSeenText');
 
+  if (!deviceIcon || !deviceText || !deviceBadge || !lastSeenText) {
+    return;
+  }
+
   // Consider device online if lastUpdate was within last 60 seconds
   const isOnline = lastUpdate && (Date.now() - lastUpdate < 60000);
 
@@ -96,53 +105,115 @@ function updateDeviceStatusUI(data) {
 }
 
 /**
- * Update mode card and auto schedule toggle based on schedule.enabled
+ * Apply gate control restrictions based on role, schedule, and portal mode
+ */
+function applyGateRestrictions() {
+  const role = sessionStorage.getItem('role');
+  const wrapper = document.getElementById('gateControlButtonsWrapper');
+  const gateControl = document.querySelector('.card-gate');
+
+  if (!wrapper) return;
+
+  // Clear all restriction classes first
+  wrapper.classList.remove('disabled-mode', 'disabled-siang', 'admin-auto-hint');
+  if (gateControl) gateControl.classList.remove('off-gate');
+
+  if (role === 'admin') {
+    // Admin: ALWAYS can use gate manually
+    // But when auto schedule is enabled, show low opacity as visual hint
+    if (isScheduleEnabled) {
+      wrapper.classList.add('admin-auto-hint');
+    }
+  } else {
+    // User role
+    if (isScheduleEnabled && currentPortalMode.includes('siang')) {
+      // Siang + auto schedule = fully disabled for user
+      wrapper.classList.add('disabled-mode');
+      if (gateControl) gateControl.classList.add('off-gate');
+    } else if (!isScheduleEnabled) {
+      // Schedule disabled = user can always use gate
+    } else if (currentPortalMode.includes('siang')) {
+      // Siang without schedule = disabled for user
+      wrapper.classList.add('disabled-siang');
+    }
+    // Malam mode = user can use gate (no classes added)
+  }
+}
+
+/**
+ * Update mode card and auto schedule toggle based on schedule data
  */
 function updateScheduleUI(data) {
   const modeText = document.getElementById('currentModeText');
   const modeIcon = document.getElementById('modeIcon');
   const toggle = document.getElementById('autoScheduleToggle');
-  const wrapper = document.getElementById('gateControlButtonsWrapper');
-  const gateControl = document.querySelector('.card-gate');
 
   const enabled = data.enabled === true;
-  
+  isScheduleEnabled = enabled;
+
   if (modeIcon) modeIcon.className = 'status-card-icon';
 
   if (enabled) {
     if (modeText) modeText.textContent = 'Enabled';
     if (modeIcon) modeIcon.classList.add('mode-auto');
-    if (toggle && toggle.id === 'autoScheduleToggle') toggle.checked = true;
-    
-    // Disable gate buttons wrapper
-    if (wrapper) wrapper.classList.add('disabled-mode');
-    if (gateControl) gateControl.classList.add('off-gate');
+    if (toggle) toggle.checked = true;
   } else {
     if (modeText) modeText.textContent = 'Disabled';
     if (modeIcon) modeIcon.classList.add('mode-manual');
-    if (toggle && toggle.id === 'autoScheduleToggle') toggle.checked = false;
-    
-    // Enable gate buttons wrapper
-    if (wrapper) wrapper.classList.remove('disabled-mode');
-    if (gateControl) gateControl.classList.remove('off-gate');
+    if (toggle) toggle.checked = false;
   }
+
+  // Re-apply gate restrictions whenever schedule state changes
+  applyGateRestrictions();
+}
+
+/**
+ * Listen for root 'time' and 'statusPortal' tags to update the Current Time Card
+ */
+function listenFirebaseTimeAndMode() {
+  const timeRef = firebase.database().ref('time');
+  const fbModeRef = firebase.database().ref('statusPortal');
+
+  timeRef.on('value', (snapshot) => {
+    const timeVal = snapshot.val();
+    const el = document.getElementById('currentTime');
+    if (el) el.textContent = timeVal || '--:--:--';
+  });
+
+  fbModeRef.on('value', (snapshot) => {
+    const modeVal = snapshot.val();
+    const el = document.getElementById('fbModeText');
+    if (el) el.textContent = modeVal || '--';
+
+    // Store current mode globally
+    currentPortalMode = (modeVal || '').toLowerCase();
+
+    // Re-apply gate restrictions whenever portal mode changes
+    applyGateRestrictions();
+  });
 }
 
 /**
  * Listen for schedule settings changes
  */
 function listenSchedule() {
-  scheduleRef.on('value', (snapshot) => {
-    const data = snapshot.val() || { openTime: '06', closeTime: '19', enabled: true };
-    let openStr = String(data.openTime || '06');
-    let closeStr = String(data.closeTime || '19');
-    
-    if (!openStr.includes(':')) openStr += ':00';
-    if (!closeStr.includes(':')) closeStr += ':00';
+  const openCloseRef = firebase.database().ref('schedule/openClose');
+  openCloseRef.on('value', (snapshot) => {
+    const data = snapshot.val() || { open: '06:00', close: '19:00' };
+    const openStr = data.open || '06:00';
+    const closeStr = data.close || '19:00';
 
-    document.getElementById('scheduleOpen').textContent = openStr;
-    document.getElementById('scheduleClose').textContent = closeStr;
-    updateScheduleUI(data);
+    const openEl = document.getElementById('scheduleOpen');
+    const closeEl = document.getElementById('scheduleClose');
+    if (openEl) openEl.textContent = openStr;
+    if (closeEl) closeEl.textContent = closeStr;
+  });
+
+  // Listen to schedule enabled state separately
+  const enabledRef = firebase.database().ref('schedule/enabled');
+  enabledRef.on('value', (snapshot) => {
+    const enabled = snapshot.val();
+    updateScheduleUI({ enabled: enabled === true });
   });
 }
 
@@ -233,25 +304,5 @@ function computeTodayStats() {
     document.getElementById('totalAccessText').textContent = total;
     document.getElementById('successCount').textContent = success;
     document.getElementById('deniedCount').textContent = denied;
-  });
-}
-
-/**
- * Listen for root 'time' and 'mode' tags to update the Current Time Card
- */
-function listenFirebaseTimeAndMode() {
-  const timeRef = firebase.database().ref('time');
-  const fbModeRef = firebase.database().ref('mode');
-
-  timeRef.on('value', (snapshot) => {
-    const timeVal = snapshot.val();
-    const el = document.getElementById('currentTime');
-    if (el) el.textContent = timeVal || '--:--:--';
-  });
-
-  fbModeRef.on('value', (snapshot) => {
-    const modeVal = snapshot.val();
-    const el = document.getElementById('fbModeText');
-    if (el) el.textContent = modeVal || '--';
   });
 }

@@ -232,17 +232,19 @@
 
 .schedule-info {
   display: flex;
-  gap: 24px;
+  justify-content: center;
+  gap: 16px;
   background: #f8fafc;
-  padding: 12px 20px;
+  padding: 8px 12px;
   border-radius: var(--radius-sm);
+  font-size: 0.8rem;
 }
 
 .schedule-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.875rem;
+  gap: 6px;
+  font-size: 0.8rem;
   color: var(--text-muted);
 }
 
@@ -365,9 +367,20 @@
   }
 }
 
-.disabled-mode {
+.disabled-mode,
+.disabled-siang {
   opacity: 0.3 !important;
   pointer-events: none !important;
   cursor: not-allowed !important;
   filter: grayscale(100%);
 }
+
+/* Admin hint: low opacity but still clickable when auto schedule is on */
+.admin-auto-hint {
+  opacity: 0.55;
+  transition: opacity 0.3s ease;
+}
+.admin-auto-hint:hover {
+  opacity: 0.85;
+}
+

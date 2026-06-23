@@ -1,0 +1,96 @@
+/* ============================================
+   SMART GATE — Login Styles
+   ============================================ */
+
+body {
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.login-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  padding: 40px 32px;
+  text-align: center;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 32px;
+}
+
+.login-logo svg {
+  width: 40px;
+  height: 40px;
+}
+
+.login-form {
+  text-align: left;
+}
+
+.login-form .form-group {
+  margin-bottom: 20px;
+}
+
+.login-form .form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.login-form .form-control {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  transition: var(--transition);
+  box-sizing: border-box;
+}
+
+.login-form .form-control:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.login-error {
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-top: 12px;
+  display: none;
+  text-align: center;
+}
+
+.login-footer {
+  margin-top: 24px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}

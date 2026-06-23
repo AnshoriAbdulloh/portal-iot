@@ -16,7 +16,7 @@ const db = firebase.database();
 
 // Database references
 const gateRef = db.ref("gate");
-const residentsRef = db.ref("residents");
+const residentsRef = db.ref("warga");
 const scheduleRef = db.ref("schedule");
 const accessLogsRef = db.ref("riwayatRFID");
 const adminLogsRef = db.ref("adminLogs");
