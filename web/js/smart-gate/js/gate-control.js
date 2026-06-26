@@ -31,9 +31,15 @@ function openGate() {
     manual: "BUKA",
   });
 
-  const roleLabel = role === "admin" ? "Admin" : "Resident";
+  const roleLabel =
+    role === "admin"
+      ? "Admin"
+      : sessionStorage.getItem("username") || "Resident";
+  const houseLabel =
+    role === "admin" ? "-" : sessionStorage.getItem("house") || "-";
+  const sourceLabel = role === "admin" ? "admin" : "user";
 
-  // Log admin action
+  // Log admin action (only really relevant for admin, but keeping it for completeness if users also use these functions)
   adminLogsRef.push({
     action: "Gate opened manually",
     user: roleLabel,
@@ -45,9 +51,9 @@ function openGate() {
     timestamp: firebase.database.ServerValue.TIMESTAMP,
     uid: "-",
     residentName: roleLabel,
-    house: "-",
+    house: houseLabel,
     status: "success",
-    source: "admin",
+    source: sourceLabel,
   });
 
   showToast("Gate opened successfully", "success");
@@ -82,12 +88,28 @@ function closeGate() {
     manual: "TUTUP",
   });
 
-  const roleLabel = role === "admin" ? "Admin" : "Resident";
+  const roleLabel =
+    role === "admin"
+      ? "Admin"
+      : sessionStorage.getItem("username") || "Resident";
+  const houseLabel =
+    role === "admin" ? "-" : sessionStorage.getItem("house") || "-";
+  const sourceLabel = role === "admin" ? "admin" : "user";
 
   adminLogsRef.push({
     action: "Gate closed manually",
     user: roleLabel,
     timestamp: firebase.database.ServerValue.TIMESTAMP,
+  });
+
+  // Log access
+  accessLogsRef.push({
+    timestamp: firebase.database.ServerValue.TIMESTAMP,
+    uid: "-",
+    residentName: roleLabel,
+    house: houseLabel,
+    status: "success",
+    source: sourceLabel,
   });
 
   showToast("Gate closed successfully", "success");
@@ -159,7 +181,13 @@ function toggleGateManual() {
         manual: newManual,
       });
 
-      const roleLabel = role === "admin" ? "Admin" : "Resident";
+      const roleLabel =
+        role === "admin"
+          ? "Admin"
+          : sessionStorage.getItem("username") || "Resident";
+      const houseLabel =
+        role === "admin" ? "-" : sessionStorage.getItem("house") || "-";
+      const sourceLabel = role === "admin" ? "admin" : "user";
 
       adminLogsRef.push({
         action: `Gate ${newManual === "BUKA" ? "opened" : "closed"} manually (toggle)`,
@@ -171,9 +199,9 @@ function toggleGateManual() {
         timestamp: firebase.database.ServerValue.TIMESTAMP,
         uid: "-",
         residentName: roleLabel,
-        house: "-",
+        house: houseLabel,
         status: "success",
-        source: "user",
+        source: sourceLabel,
       });
 
       showToast(
@@ -182,3 +210,18 @@ function toggleGateManual() {
       );
     });
 }
+
+// function lihatJadwal() {
+//   // Listen to schedule enabled state separately
+//   const enabledRef = firebase.database().ref("schedule/enabled");
+//   enabledRef.on("value", (snapshot) => {
+//     const enabled = snapshot.val();
+//     const tanda = document.querySelector(".manual");
+
+//     if (enabled) {
+//       tanda.classList.add("tanda");
+//     } else {
+//       tanda.classList.remove("tanda");
+//     }
+//   });
+// }

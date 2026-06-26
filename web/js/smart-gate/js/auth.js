@@ -73,6 +73,7 @@ function handleLogin(e) {
       let found = false;
       let userUid = '';
       let username = '';
+      let userHouse = '';
       wargaSnapshot.forEach((child) => {
         const data = child.val();
         const expectedPass = data.password || data.nama;
@@ -80,6 +81,7 @@ function handleLogin(e) {
           found = true;
           userUid = child.key;
           username = data.nama;
+          userHouse = data.alamat || data.house || '-';
         }
       });
 
@@ -89,6 +91,7 @@ function handleLogin(e) {
         sessionStorage.setItem('role', 'user');
         sessionStorage.setItem('uid', userUid);
         sessionStorage.setItem('username', username);
+        sessionStorage.setItem('house', userHouse);
         window.location.href = 'index.html';
       } else {
         errorMsg.style.display = 'block';

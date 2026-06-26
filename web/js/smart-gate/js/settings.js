@@ -6,16 +6,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadSchedule() {
   scheduleRef.on("value", (snapshot) => {
-    const data = snapshot.val() || {
-      openTime: "06",
-      closeTime: "19",
-      enabled: true,
-    };
+    const data = snapshot.val() || {};
 
-    let openTimeStr = String(data.openTime || "06");
-    let closeTimeStr = String(data.closeTime || "19");
-    if (!openTimeStr.includes(":")) openTimeStr += ":00";
-    if (!closeTimeStr.includes(":")) closeTimeStr += ":00";
+    let openTimeStr = "06:00";
+    let closeTimeStr = "19:00";
+    
+    if (data.openClose && typeof data.openClose === 'string' && data.openClose.length === 4) {
+      openTimeStr = data.openClose.substring(0, 2) + ":00";
+      closeTimeStr = data.openClose.substring(2, 4) + ":00";
+    } else {
+      // Fallback
+      if (data.openTime) openTimeStr = String(data.openTime) + ":00";
+      if (data.closeTime) closeTimeStr = String(data.closeTime) + ":00";
+    }
 
     document.getElementById("openTime").value = openTimeStr;
     document.getElementById("closeTime").value = closeTimeStr;

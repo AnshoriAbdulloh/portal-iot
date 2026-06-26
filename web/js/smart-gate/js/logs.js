@@ -7,10 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function loadLogs() {
-  accessLogsRef.orderByChild('timestamp').on('value', (snapshot) => {
+  // Use default chronological ordering instead of timestamp, since ESP doesn't send timestamp
+  accessLogsRef.on('value', (snapshot) => {
     allLogs = [];
     snapshot.forEach((child) => {
-      allLogs.push({ id: child.key, ...child.val() });
+      const data = child.val();
+      allLogs.push({ 
+        id: child.key, 
+        ...data,
+        // Map ESP fields to our expected fields
+        residentName: data.residentName || data.nama || 'Unknown',
+        house: data.house || data.alamat || '—',
+        status: data.status || (data.nama === "Tidak Dikenali" ? "failed" : "success"),
+        source: data.source || 'rfid',
+        uid: data.uid || '—'
+      });
     });
     allLogs.reverse(); // newest first
     applyFilters();
@@ -34,11 +45,11 @@ function applyFilters() {
   let filtered = allLogs.filter(log => {
     if (status !== 'all' && log.status !== status) return false;
     if (source !== 'all' && log.source !== source) return false;
-    if (dateFrom) {
+    if (dateFrom && log.timestamp) {
       const fromTs = new Date(dateFrom).getTime();
       if (log.timestamp < fromTs) return false;
     }
-    if (dateTo) {
+    if (dateTo && log.timestamp) {
       const toTs = new Date(dateTo).setHours(23, 59, 59, 999);
       if (log.timestamp > toTs) return false;
     }
@@ -59,10 +70,10 @@ function renderLogs(logs) {
   
   tbody.innerHTML = shown.map(log => `
     <tr>
-      <td>${log.timestamp ? formatTimestamp(log.timestamp) : '—'}</td>
-      <td><code class="resident-uid">${log.uid || '—'}</code></td>
-      <td>${log.residentName || 'Unknown'}</td>
-      <td>${log.house || '—'}</td>
+      <td>${log.timestamp ? formatTimestamp(log.timestamp) : (log.waktu || '—')}</td>
+      <td><code class="resident-uid">${log.uid}</code></td>
+      <td>${log.residentName}</td>
+      <td>${log.house}</td>
       <td><span class="badge ${log.status === 'success' ? 'badge-success' : 'badge-danger'}">${log.status === 'success' ? 'Success' : 'Failed'}</span></td>
       <td><span class="source-badge source-${log.source || 'rfid'}">${(log.source || 'rfid').toUpperCase()}</span></td>
     </tr>
